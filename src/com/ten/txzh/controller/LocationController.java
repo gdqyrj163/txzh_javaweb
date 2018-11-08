@@ -28,7 +28,7 @@ public class LocationController {
 		userLoc.setUserid(Integer.parseInt(map.get("userid").toString()));
 		userLoc.setLongtude(Float.parseFloat(map.get("longtude").toString()));
 		userLoc.setLatitude(Float.parseFloat(map.get("latitude").toString()));
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		userLoc.setTime(format.format(new Date()));
 		
 		HashMap<String, String> resultMap = new HashMap<String, String>();
