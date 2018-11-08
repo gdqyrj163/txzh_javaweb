@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ten.txzh.dao.LocationMapper">
+	<insert id="setLocation" parameterType="com.ten.txzh.pojo.Maps" >
+		INSERT INTO maps (userid,longtude,latitude,time) values (#{userid},#{longtude},#{latitude},#{time});	  
+	</insert>
+	
+	<update id="updateLocation" parameterType="com.ten.txzh.pojo.Maps" >
+		UPDATE maps SET longtude=#{longtude}, latitude=#{latitude} ,time =#{time} where userid=#{userid};
+	</update>
+	
+	<select id="getUserLocation" parameterType="Integer" resultType="com.ten.txzh.pojo.Maps">
+		select * from maps where userid = #{userid};
+	</select>
+	
+	<select id="locationCheck" parameterType="Integer" resultType="Integer">
+		select count(*) from maps where userid = #{userid};
+	</select>
+</mapper>

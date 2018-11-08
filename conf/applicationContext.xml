@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="  
+           http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<!-- 自动扫描除了springMVC-servlet中以外的所有包，并针对注解的bean进行实例化 -->
+	<context:component-scan base-package="com.ten.txzh.service" />
+	<context:component-scan base-package="com.ten.txzh.dao" />
+	<context:component-scan base-package="com.ten.txzh.pojo" />
+	<!-- <aop:aspectj-autoproxy></aop:aspectj-autoproxy> -->
+	<!-- <context:property-placeholder location="classpath:jdbc_info.properties"/> -->
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/tianxiazongheng"/>
+		<property name="username" value="root"/>
+		<property name="password" value="123456"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:com/ten/txzh/dao/*Mapper.xml"/>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 指定扫描的包名，  如果扫描多个包，每个包中间使用半角逗号分隔
+        -->
+        <property name="basePackage" value="com.ten.txzh.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>        
+    </bean>
+	
+</beans>

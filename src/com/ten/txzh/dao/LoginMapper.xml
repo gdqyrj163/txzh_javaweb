@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ten.txzh.dao.LoginMapper">
+	<select id="LoginCheck" parameterType="com.ten.txzh.pojo.User" resultType="com.ten.txzh.pojo.User" >
+		select * FROM USER WHERE email = #{email} and password = #{password};
+	</select>
+	
+</mapper>
