@@ -8,11 +8,11 @@
  	</select>
  	
  	<insert id="CreateGroup" parameterType="com.ten.txzh.pojo.Group"  >
- 		INSERT INTO group (name,introduce,master,image) values (#{name},#{introduce},#{master},#{image});	
+ 		INSERT INTO `group`(name, introduce, master, image) VALUES(#{name}, #{introduce}, #{master}, #{image});
  	</insert>
  	
  	<insert id="JoinGroup"  parameterType="com.ten.txzh.pojo.Group_User"  >
- 		INSERT INTO group (groupid,userid) values (#{groupid},#{userid});
+ 		INSERT INTO `group`(groupid,userid) values(#{groupid},#{userid});
  	</insert>
  	
  	<select id="JoinGroupCheck" parameterType="com.ten.txzh.pojo.Group_User" resultType="int">
@@ -20,11 +20,11 @@
  	</select>
  	
  	<select id="searchGroup" parameterType="String" resultType="com.ten.txzh.pojo.Group">
- 		select * from group where groupid = #{searchGroupValue} or name like '%${searchGroupValue}%';
+ 		select * from `group` where groupid = #{searchGroupValue} or name like '%#{searchGroupValue}%';
  	</select>
  	
  	<select id="getGroupMaster" parameterType="int" resultType="int">
- 		select master from group where groupid = #{groupid};
+ 		select master from `group` where groupid = #{groupid};
  	</select>
  	
  	<delete id="kickUser" parameterType="com.ten.txzh.pojo.Group_User">

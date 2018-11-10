@@ -37,16 +37,25 @@ public class GroupController {
 		Gson gson = new Gson();
 		Map<String, String> resultMap = new HashMap<String, String>();
 		
-		List<String> getList = new ArrayList<String>();
-		getList.add(map.get("map").toString());
-		getList.add(map.get("introduce").toString());
-		getList.add(map.get("master").toString());
-		getList.add(map.get("image").toString());
+		String name = map.get("name").toString();
+		String introduce = map.get("introduce").toString();
+		String master = map.get("master").toString();
+		String image = map.get("image").toString();
+		System.out.println(image);
 		
-		for(String ins: getList) {
-			System.out.println(ins);
+		Group newGroup = new Group();
+		newGroup.setName(name);
+		newGroup.setIntroduce(introduce);
+		newGroup.setMaster(Integer.parseInt(master));
+		newGroup.setImage(image);
+		
+		if(groupService.CreateGroup(newGroup) == 1) {
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
 		}
 		
+		System.out.println("CreateGroup:" + resultMap.get("resultCode"));
 		return gson.toJson(resultMap);
 		
 	}
