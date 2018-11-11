@@ -68,16 +68,21 @@ public class GroupController {
 		groupList = groupService.searchGroup(searchGroupValue);
 		
 		Map<String, List<String>> resultMap = new HashMap<String, List<String>>();
+		
 		for(Group group:groupList) {
 			List<String> groupEachValue = new ArrayList<String>();
 			groupEachValue.add(String.valueOf(group.getGroupid()));
 			groupEachValue.add(group.getName());
+			groupEachValue.add(group.getImage());
 			resultMap.put(String.valueOf(group.getGroupid()), groupEachValue);
 		}
 		
 		Gson gson = new Gson();
 		
-		return gson.toJson(groupList);
+		System.out.println("searchKey:" + searchGroupValue + ", getValue:" + gson.toJson(resultMap));
+		return gson.toJson(resultMap);
+		
+		
 	}
 	
 	@ResponseBody

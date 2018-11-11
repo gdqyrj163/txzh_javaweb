@@ -20,7 +20,7 @@
  	</select>
  	
  	<select id="searchGroup" parameterType="String" resultType="com.ten.txzh.pojo.Group">
- 		select * from `group` where groupid = #{searchGroupValue} or name like '%#{searchGroupValue}%';
+ 		select * from `group` where groupid = #{_parameter} or name like '%${_parameter}%';
  	</select>
  	
  	<select id="getGroupMaster" parameterType="int" resultType="int">
@@ -28,7 +28,7 @@
  	</select>
  	
  	<delete id="kickUser" parameterType="com.ten.txzh.pojo.Group_User">
- 		delete from group_user where groupid =#{groupid} and  userid =#{userid};
+ 		delete from group_user where groupid = #{groupid} and userid =#{userid};
  	</delete>
  	
 </mapper>
