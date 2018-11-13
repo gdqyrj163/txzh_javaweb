@@ -1,6 +1,7 @@
 package com.ten.txzh.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,13 @@ public class GroupService {
 	public List<Group> searchGroup(String searchGroupValue){
 		List<Group> groupList = new ArrayList<Group>();
 		try {
-			groupList = groupDao.searchGroup(searchGroupValue);
+			if(searchGroupValue.matches("[0-9]+")) {
+				System.out.println("Search Group By Integer.");
+				groupList = groupDao.searchGroupByNum(Integer.parseInt(searchGroupValue));
+			}else {
+				System.out.println("Search Group By String.");
+				groupList = groupDao.searchGroup(searchGroupValue);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -60,5 +67,17 @@ public class GroupService {
 			resultCode = 1;
 		}
 		return resultCode;
+	}
+	
+	@SuppressWarnings("finally")
+	public Group getGroupInfo(int groupid) {
+		Group group = new Group();
+		try {
+			group = groupDao.getGroupInfo(groupid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return group;
+		}
 	}
 }

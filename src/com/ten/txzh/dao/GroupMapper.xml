@@ -20,6 +20,10 @@
  	</select>
  	
  	<select id="searchGroup" parameterType="String" resultType="com.ten.txzh.pojo.Group">
+ 		select * from `group` where name like '%${_parameter}%';
+ 	</select>
+ 	
+ 	<select id="searchGroupByNum" parameterType="int" resultType="com.ten.txzh.pojo.Group">
  		select * from `group` where groupid = #{_parameter} or name like '%${_parameter}%';
  	</select>
  	
@@ -30,5 +34,9 @@
  	<delete id="kickUser" parameterType="com.ten.txzh.pojo.Group_User">
  		delete from group_user where groupid = #{groupid} and userid =#{userid};
  	</delete>
+ 	
+ 	<select id="getGroupInfo" parameterType="int" resultType="com.ten.txzh.pojo.Group">
+ 		select * from `group` where groupid = #{_parameter};
+ 	</select>
  	
 </mapper>

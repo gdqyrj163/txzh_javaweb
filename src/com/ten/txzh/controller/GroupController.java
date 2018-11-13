@@ -79,7 +79,7 @@ public class GroupController {
 		
 		Gson gson = new Gson();
 		
-		System.out.println("searchKey:" + searchGroupValue + ", getValue:" + gson.toJson(resultMap));
+//		System.out.println("searchKey:" + searchGroupValue + ", getValue:" + gson.toJson(resultMap));
 		return gson.toJson(resultMap);
 		
 		
@@ -113,6 +113,30 @@ public class GroupController {
 		return gson.toJson(resultMap);
 	}
 	
+	@SuppressWarnings("finally")
+	@ResponseBody
+	@RequestMapping(value = "/getGroupInfo", method = RequestMethod.POST, consumes = "application/json")
+	public String getGroupInfo(@RequestBody Map map) {
+		Map<String, String> resultMap = new HashMap<String, String>();
+		int groupid = Integer.parseInt(map.get("groupid").toString());
+		
+		Group group = new Group();
+		group = groupService.getGroupInfo(groupid);
+		try {
+			resultMap.put("groupid", group.getGroupid() + "");
+			resultMap.put("name", group.getName());
+			resultMap.put("introduce", group.getIntroduce());
+			resultMap.put("master", group.getMaster() + "");
+			resultMap.put("image", group.getImage());
+			resultMap.put("resultCode", "1");
+		}catch(Exception e) {
+			resultMap.put("resultCode", "0");
+		}finally {
+			Gson gson = new Gson();
+			
+			return gson.toJson(resultMap);
+		}
+	}
 	
 	public Group createGroup_setGroup(Group group, String filedName, String filedValue) {
 		switch(filedName) {
