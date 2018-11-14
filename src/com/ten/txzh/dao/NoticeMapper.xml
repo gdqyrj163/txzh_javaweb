@@ -11,4 +11,8 @@
 		update groupnotice set operation = 0, result = #{result}, time = #{time}
 			where noticeid = #{noticeid};
 	</update>
+	
+	<insert id="kickMessage" parameterType="com.ten.txzh.pojo.GroupNotice" >
+ 			INSERT INTO groupnotice (userid,noticeid,type,operation,source, target,result, time) values (#{userid},#{noticeid},#{type},#{operation},#{source}, #{target},#{result}, #{time});	
+ 	</insert>
 </mapper>

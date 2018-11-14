@@ -42,4 +42,17 @@
  		select * from `group` where groupid = #{_parameter};
  	</select>
  	
+ 	
+ 	
+ 	<select id="getGroupByUserid" parameterType="int" resultType="java.util.List">
+ 			select groupid from group_user where userid = #{userid};
+ 	</select>
+ 	
+ 	<select id="getGroupMembersNumber" parameterType="int" resultType="int">
+ 		select count(*) from group_user where groupid = #{groupid};
+ 	</select>
+ 	
+ 	
+ 	
+ 	
 </mapper>

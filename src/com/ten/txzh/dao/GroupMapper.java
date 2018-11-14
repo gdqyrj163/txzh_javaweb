@@ -3,6 +3,7 @@ package com.ten.txzh.dao;
 import java.util.List;
 
 import com.ten.txzh.pojo.Group;
+import com.ten.txzh.pojo.GroupNotice;
 import com.ten.txzh.pojo.Group_User;
 
 public interface GroupMapper {
@@ -15,4 +16,6 @@ public interface GroupMapper {
 	int getGroupMaster(int groupid);
 	int kickUser(Group_User group_user);
 	Group getGroupInfo(int groupid);
+	int getGroupMembersNumber(GroupNotice notice );
+	List<Group> getGroupByUserid(int userid);
 }
