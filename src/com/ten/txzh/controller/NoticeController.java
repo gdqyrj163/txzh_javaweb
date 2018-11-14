@@ -1,8 +1,10 @@
 package com.ten.txzh.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,28 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+	@ResponseBody
+	@RequestMapping(value = "/getGroupNotice", method = RequestMethod.POST, consumes = "application/json")
+	public String getGroupNotice(@RequestBody Map map) {
+		String userid = map.get("userid").toString();
+		List<GroupNotice> noticeList = new ArrayList<GroupNotice>();
+		Map<String, List<String>> noticeListMap = new HashMap<String, List<String>>();
+		
+		noticeList = noticeService.getGroupNotice(Integer.parseInt(userid));
+		for(GroupNotice notice: noticeList) {
+			List<String> noticeInfo = new ArrayList<String>();
+			noticeInfo.add(String.valueOf(notice.getNoticeid()));
+			noticeInfo.add(String.valueOf(notice.getType()));
+			noticeInfo.add(String.valueOf(notice.getOperation()));
+			noticeInfo.add(String.valueOf(notice.getSource()));
+			noticeListMap.put(String.valueOf(notice.getNoticeid()), noticeInfo);
+		}
+		
+		Gson gson = new Gson();
+		System.out.println("Get User Notices");
+		return gson.toJson(noticeListMap);
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/joinGroupNotice", method = RequestMethod.POST, consumes = "application/json")

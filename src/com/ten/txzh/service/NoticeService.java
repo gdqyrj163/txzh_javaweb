@@ -1,5 +1,8 @@
 package com.ten.txzh.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +29,11 @@ public class NoticeService {
 			resultCode = 1;
 		}
 		return resultCode;
+	}
+	
+	public List<GroupNotice> getGroupNotice(int userid){
+		List<GroupNotice> noticeList = new ArrayList<GroupNotice>();
+		noticeList = noticeDao.getGroupNotice(userid);
+		return noticeList;
 	}
 }

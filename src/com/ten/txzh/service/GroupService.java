@@ -79,4 +79,10 @@ public class GroupService {
 			return group;
 		}
 	}
+	
+	public int getMembersNum(int groupid) {
+		int membersNum = 0;
+		membersNum = groupDao.getGroupMembersNumber(groupid);
+		return membersNum;
+	}
 }

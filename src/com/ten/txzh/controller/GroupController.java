@@ -18,8 +18,10 @@ import com.google.gson.Gson;
 import com.ten.txzh.pojo.Group;
 import com.ten.txzh.pojo.GroupNotice;
 import com.ten.txzh.pojo.Group_User;
+import com.ten.txzh.pojo.User;
 import com.ten.txzh.service.GroupService;
 import com.ten.txzh.service.NoticeService;
+import com.ten.txzh.service.UserService;
 
 @Controller
 public class GroupController {
@@ -29,6 +31,9 @@ public class GroupController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@SuppressWarnings("finally")
 	@ResponseBody
@@ -126,12 +131,17 @@ public class GroupController {
 		
 		Group group = new Group();
 		group = groupService.getGroupInfo(groupid);
+		int membersNum = groupService.getMembersNum(groupid);
+		User master = new User();
+		master = userService.getUserInfo(group.getMaster());
 		try {
 			resultMap.put("groupid", group.getGroupid() + "");
 			resultMap.put("name", group.getName());
 			resultMap.put("introduce", group.getIntroduce());
 			resultMap.put("master", group.getMaster() + "");
+			resultMap.put("masterName", master.getUsername());
 			resultMap.put("image", group.getImage());
+			resultMap.put("membersNum", String.valueOf(membersNum));
 			resultMap.put("resultCode", "1");
 		}catch(Exception e) {
 			resultMap.put("resultCode", "0");

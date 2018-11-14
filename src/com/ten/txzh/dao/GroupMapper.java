@@ -16,6 +16,6 @@ public interface GroupMapper {
 	int getGroupMaster(int groupid);
 	int kickUser(Group_User group_user);
 	Group getGroupInfo(int groupid);
-	int getGroupMembersNumber(GroupNotice notice );
+	int getGroupMembersNumber(int groupid);
 	List<Group> getGroupByUserid(int userid);
 }
