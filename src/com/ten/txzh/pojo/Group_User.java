@@ -1,16 +1,13 @@
 package com.ten.txzh.pojo;
 
 public class Group_User {
-	private int groupId;
+	private int groupid;
 	private int userid;
-	
-	
-	
-	public int getGroupId() {
-		return groupId;
+	public int getGroupid() {
+		return groupid;
 	}
-	public void setGroupId(int groupId) {
-		this.groupId = groupId;
+	public void setGroupid(int groupid) {
+		this.groupid = groupid;
 	}
 	public int getUserid() {
 		return userid;
@@ -18,6 +15,5 @@ public class Group_User {
 	public void setUserid(int userid) {
 		this.userid = userid;
 	}
-	
 	
 }

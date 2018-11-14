@@ -6,7 +6,7 @@ import com.ten.txzh.pojo.Group;
 import com.ten.txzh.pojo.Group_User;
 
 public interface GroupMapper {
-	List<String> getGroupUsers(int groupid);
+	List<String> getGroupMembers(int groupid);
 	int CreateGroup(Group group);
 	int JoinGroup(Group_User group_user);
 	int JoinGroupCheck(Group_User group_user);

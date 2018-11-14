@@ -43,7 +43,7 @@ public class NoticeController {
 		if(noticeService.MessageHandle(notice) == 1) {
 			if(notice.getResult() == 1) {
 				Group_User group_user = new Group_User();
-				group_user.setGroupId(Integer.parseInt(groupid));
+				group_user.setGroupid(Integer.parseInt(groupid));
 				group_user.setUserid(Integer.parseInt(userid));
 				if(groupService.JoinGroup(group_user) == 1) {
 					resultMap.put("resultCode", "1");

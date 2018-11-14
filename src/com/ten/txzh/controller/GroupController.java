@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.ten.txzh.pojo.Group;
 import com.ten.txzh.pojo.GroupNotice;
+import com.ten.txzh.pojo.Group_User;
 import com.ten.txzh.service.GroupService;
 import com.ten.txzh.service.NoticeService;
 
@@ -41,7 +41,6 @@ public class GroupController {
 		String introduce = map.get("introduce").toString();
 		String master = map.get("master").toString();
 		String image = map.get("image").toString();
-		System.out.println(image);
 		
 		Group newGroup = new Group();
 		newGroup.setName(name);
@@ -49,7 +48,12 @@ public class GroupController {
 		newGroup.setMaster(Integer.parseInt(master));
 		newGroup.setImage(image);
 		
-		if(groupService.CreateGroup(newGroup) == 1) {
+		int groupid = groupService.CreateGroup(newGroup);
+		if(groupid != 0) {
+			Group_User group_master = new Group_User();
+			group_master.setGroupid(groupid);
+			group_master.setUserid(Integer.parseInt(master));
+			groupService.JoinGroup(group_master);
 			resultMap.put("resultCode", "1");
 		}else {
 			resultMap.put("resultCode", "0");

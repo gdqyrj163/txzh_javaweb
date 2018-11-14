@@ -18,11 +18,10 @@ public class GroupService {
 	GroupMapper groupDao;
 	
 	public int CreateGroup(Group group) {
-		int resultCode = 0;
-		if(groupDao.CreateGroup(group) > 0) {
-			resultCode = 1;
-		}
-		return resultCode;
+		int groupid = 0;
+		groupid = groupDao.CreateGroup(group);
+		System.out.println("Create Group Success:" + groupid);
+		return groupid;
 	}
 	
 	public int JoinGroup(Group_User group_user) {

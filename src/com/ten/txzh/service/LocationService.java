@@ -38,7 +38,7 @@ public class LocationService {
 	
 	public List<Maps> getGroupLocation(int groupid){
 		List<Maps> groupUsersLoc = new ArrayList<Maps>();
-		List<String> groupUsers = groupDao.getGroupUsers(groupid);
+		List<String> groupUsers = groupDao.getGroupMembers(groupid);
 		if(groupUsers.isEmpty() == false) {
 			for(int i = 0; i < groupUsers.size(); i++) {
 				groupUsersLoc.add(locationDao.getUserLocation(Integer.parseInt(groupUsers.get(i))));

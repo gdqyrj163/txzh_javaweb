@@ -3,16 +3,19 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ten.txzh.dao.GroupMapper">
- 	<select id="getGroupUsers" parameterType="int" resultType="java.util.List">
+ 	<select id="getGroupMembers" parameterType="int" resultType="java.util.List">
  		select userid from group_user where groupid = #{groupid};
  	</select>
  	
  	<insert id="CreateGroup" parameterType="com.ten.txzh.pojo.Group"  >
+ 		<selectKey resultType="int" order="AFTER" keyProperty="groupid">
+ 			select LAST_INSERT_ID()
+ 		</selectKey>
  		INSERT INTO `group`(name, introduce, master, image) VALUES(#{name}, #{introduce}, #{master}, #{image});
  	</insert>
  	
  	<insert id="JoinGroup"  parameterType="com.ten.txzh.pojo.Group_User"  >
- 		INSERT INTO `group`(groupid,userid) values(#{groupid},#{userid});
+ 		INSERT INTO group_user values(#{groupid},#{userid});
  	</insert>
  	
  	<select id="JoinGroupCheck" parameterType="com.ten.txzh.pojo.Group_User" resultType="int">
