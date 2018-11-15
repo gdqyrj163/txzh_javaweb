@@ -35,6 +35,17 @@ public class GroupController {
 	@Autowired
 	private UserService userService;
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/getGroups", method = RequestMethod.POST, consumes = "application/json")
+	public String getGroups(@RequestBody Map map) {
+		Gson gson = new Gson();
+		String userid = map.get("userid").toString();
+		
+		
+		return null;
+	}
+	
 	@SuppressWarnings("finally")
 	@ResponseBody
 	@RequestMapping(value = "/createGroup", method = RequestMethod.POST, consumes = "application/json")
@@ -113,12 +124,21 @@ public class GroupController {
 		joinNotice.setTarget(groupid);
 		joinNotice.setResult(2);
 		joinNotice.setTime(sdf.format(new Date()));
-		if(noticeService.JoinMessage(joinNotice) == 1) {
-			resultMap.put("resultCode", "1");
-		}else {
-			resultMap.put("resultCode", "0");
-		}
 		
+		Group_User group_joiner = new Group_User();
+		group_joiner.setGroupid(Integer.parseInt(groupid));
+		group_joiner.setUserid(Integer.parseInt(userid));
+		if(groupService.joinGroupCheck(group_joiner) == 1) {
+			System.out.println("System send a message to this user.");
+			if(noticeService.JoinMessage(joinNotice) == 1) {
+				resultMap.put("resultCode", "1");
+			}else {
+				resultMap.put("resultCode", "0");
+			}
+		}else {
+			System.out.println("This user has been join in this group!");
+			resultMap.put("resultCode", "-1");
+		}
 		return gson.toJson(resultMap);
 	}
 	

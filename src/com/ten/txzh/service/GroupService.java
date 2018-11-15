@@ -1,7 +1,6 @@
 package com.ten.txzh.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,12 @@ public class GroupService {
 	public int JoinGroup(Group_User group_user) {
 		int resultCode = 0;
 		if(groupDao.JoinGroupCheck(group_user) == 0) {
+			System.out.println("User already to join in.");
 			if(groupDao.JoinGroup(group_user) > 0) {
 				resultCode = 1;
 			}
 		}else {
+			System.out.println("User has been member of this group!");
 			resultCode = -1;
 		}
 		return resultCode;
@@ -78,6 +79,14 @@ public class GroupService {
 		}finally {
 			return group;
 		}
+	}
+	
+	public int joinGroupCheck(Group_User group_user) {
+		int resultCode = 0;
+		if(groupDao.JoinGroupCheck(group_user) == 0) {
+			resultCode = 1;
+		}
+		return resultCode;
 	}
 	
 	public int getMembersNum(int groupid) {

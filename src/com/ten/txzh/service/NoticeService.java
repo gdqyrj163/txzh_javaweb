@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ten.txzh.dao.GroupMapper;
 import com.ten.txzh.dao.NoticeMapper;
 import com.ten.txzh.pojo.GroupNotice;
 
