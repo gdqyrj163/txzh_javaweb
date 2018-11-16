@@ -19,6 +19,7 @@ import com.ten.txzh.pojo.GroupNotice;
 import com.ten.txzh.pojo.Group_User;
 import com.ten.txzh.service.GroupService;
 import com.ten.txzh.service.NoticeService;
+import com.ten.txzh.service.UserService;
 
 @Controller
 public class NoticeController {
@@ -27,6 +28,9 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService noticeService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@ResponseBody
 	@RequestMapping(value = "/getGroupNotice", method = RequestMethod.POST, consumes = "application/json")
@@ -37,11 +41,31 @@ public class NoticeController {
 		
 		noticeList = noticeService.getGroupNotice(Integer.parseInt(userid));
 		for(GroupNotice notice: noticeList) {
+			String sourceName = "";
+			String targetName = "";
 			List<String> noticeInfo = new ArrayList<String>();
 			noticeInfo.add(String.valueOf(notice.getNoticeid()));
 			noticeInfo.add(String.valueOf(notice.getType()));
 			noticeInfo.add(String.valueOf(notice.getOperation()));
-			noticeInfo.add(String.valueOf(notice.getSource()));
+			if((notice.getType() == 0) || (notice.getType() == 2)) {
+				//获取请求发出者或群信息 User to Group
+				int source = Integer.parseInt(notice.getSource());
+				sourceName = userService.getUserName(source);
+				//获取请求接收者或群信息
+				int target = Integer.parseInt(notice.getTarget());
+				targetName = groupService.getGroupName(target);
+			}else {
+				//获取请求发出者或群信息 Group to User
+				int source = Integer.parseInt(notice.getSource());
+				sourceName = groupService.getGroupName(source);
+				//获取请求接收者或群信息
+				int target = Integer.parseInt(notice.getTarget());
+				targetName = userService.getUserName(target);
+				
+			}
+			noticeInfo.add(sourceName);
+			noticeInfo.add(String.valueOf(notice.getResult()));
+			noticeInfo.add(targetName);
 			noticeListMap.put(String.valueOf(notice.getNoticeid()), noticeInfo);
 		}
 		
@@ -53,32 +77,38 @@ public class NoticeController {
 	@ResponseBody
 	@RequestMapping(value = "/joinGroupNotice", method = RequestMethod.POST, consumes = "application/json")
 	public String joinGroupHandle(@RequestBody Map map) {
-		String userid = map.get("userid").toString();
-		String groupid = map.get("groupid").toString();
 		String noticeid = map.get("noticeid").toString();
-		int result = Integer.parseInt(map.get("handle").toString());
+		int result = Integer.parseInt(map.get("result").toString());
 		Map<String, String> resultMap = new HashMap<String, String>();
 		
 		GroupNotice notice = new GroupNotice();
 		notice.setNoticeid(Integer.parseInt(noticeid));
 		notice.setResult(result);
+		notice.setOperation(0);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		notice.setTime(sdf.format(new Date()));
+		
 		if(noticeService.MessageHandle(notice) == 1) {
 			if(notice.getResult() == 1) {
-				Group_User group_user = new Group_User();
-				group_user.setGroupid(Integer.parseInt(groupid));
-				group_user.setUserid(Integer.parseInt(userid));
-				if(groupService.JoinGroup(group_user) == 1) {
-					resultMap.put("resultCode", "1");
-				}else if(groupService.JoinGroup(group_user) == -1) {
-					resultMap.put("resultCode", "-1");
+				GroupNotice handleNotice = new GroupNotice();
+				handleNotice = noticeService.getNotice(Integer.parseInt(noticeid));
+				Group_User group_joiner = new Group_User();
+				if((handleNotice.getType() != 0) && (handleNotice.getType() != 2)) {
+					//Group to User
+					group_joiner.setGroupid(Integer.parseInt(handleNotice.getSource()));
+					group_joiner.setUserid(Integer.parseInt(handleNotice.getTarget()));
 				}else {
-					resultMap.put("resultCode", "0");
+					//User to Group
+					group_joiner.setGroupid(Integer.parseInt(handleNotice.getTarget()));
+					group_joiner.setUserid(Integer.parseInt(handleNotice.getSource()));
 				}
+				int resultCode = groupService.JoinGroup(group_joiner);
+				resultMap.put("resultCode", resultCode + "");
 			}
+			System.out.println("Apply Group Pass");
+		}else {
+			System.out.println("Apply Group No Pass");
 		}
-		
 		Gson gson = new Gson();
 		return gson.toJson(resultMap);
 	}

@@ -37,4 +37,10 @@ public class NoticeService {
 		noticeList = noticeDao.getGroupNotice(userid);
 		return noticeList;
 	}
+	
+	public GroupNotice getNotice(int noticeid) {
+		GroupNotice notice = new GroupNotice();
+		notice = noticeDao.getNoticeByNoticeid(noticeid);
+		return notice;
+	}
 }

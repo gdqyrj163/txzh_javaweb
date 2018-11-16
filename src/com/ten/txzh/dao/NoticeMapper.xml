@@ -6,6 +6,10 @@
 	<select id="getGroupNotice" parameterType="int" resultType="com.ten.txzh.pojo.GroupNotice">
 		select * from groupNotice where userid = #{_parameter};
 	</select>
+	
+	<select id="getNoticeByNoticeid" parameterType="int" resultType="com.ten.txzh.pojo.GroupNotice">
+		select * from groupNotice where noticeid = #{_parameter}
+	</select>
 
 	<insert id="JoinMessage" parameterType="com.ten.txzh.pojo.GroupNotice"  >
 		INSERT INTO groupnotice (userid,noticeid,type,operation,source, target,result, time) values (#{userid},#{noticeid},#{type},#{operation},#{source}, #{target},#{result}, #{time});	

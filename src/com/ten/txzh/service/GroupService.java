@@ -16,6 +16,30 @@ public class GroupService {
 	@Autowired
 	GroupMapper groupDao;
 	
+	@SuppressWarnings("finally")
+	public List<Group_User> getGroups(int userid){
+		List<Group_User> groupList = new ArrayList<Group_User>();
+		try {
+			groupList = groupDao.getGroups(userid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return groupList;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	public List<Group_User> getGroupUsers(int groupid){
+		List<Group_User> userList = new ArrayList<Group_User>();
+		try {
+			userList = groupDao.getGroupUsers(groupid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return userList;
+		}
+	}
+	
 	public int CreateGroup(Group group) {
 		int groupid = 0;
 		groupid = groupDao.CreateGroup(group);
@@ -93,5 +117,11 @@ public class GroupService {
 		int membersNum = 0;
 		membersNum = groupDao.getGroupMembersNumber(groupid);
 		return membersNum;
+	}
+	
+	public String getGroupName(int groupid) {
+		String groupName = "";
+		groupName = groupDao.getGroupNameByGroupid(groupid);
+		return groupName;
 	}
 }

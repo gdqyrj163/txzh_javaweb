@@ -24,4 +24,10 @@ public class UserService {
 			
 		}
 	}
+	
+	public String getUserName(int userid) {
+		String userName = "";
+		userName = userDao.getUserNameByUserid(userid);
+		return userName;
+	}
 }

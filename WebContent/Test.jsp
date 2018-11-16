@@ -12,12 +12,12 @@
 <script src="js/json2.js"></script>
 <script>
 	function doit(){
-		var info = {"userid" : "123456"};
+		var info = {"noticeid" : "1", "result" : "1"};
 		$.ajax({
 			type:"POST",
 			contentType:"application/json",
 			data:JSON.stringify(info),
-			url:"getGroups.spring",
+			url:"joinGroupNotice.spring",
 		});
 	}
 </script>

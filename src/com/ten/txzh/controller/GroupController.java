@@ -41,9 +41,22 @@ public class GroupController {
 	public String getGroups(@RequestBody Map map) {
 		Gson gson = new Gson();
 		String userid = map.get("userid").toString();
+		List<Group_User> groups = new ArrayList<Group_User>();
+		Map<String, List<String>> resultMap = new HashMap<String, List<String>>();
+		
+		groups = groupService.getGroups(Integer.parseInt(userid));
+		for(Group_User eachGroup: groups) {
+			List<String> eachList = new ArrayList<String>();
+			Group groupinfo = eachGroup.getGroup();
+			eachList.add(String.valueOf(eachGroup.getGroupid()));
+			eachList.add(groupinfo.getName());
+			eachList.add(groupinfo.getImage());
+			resultMap.put(String.valueOf(eachGroup.getGroupid()), eachList);
+		}
 		
 		
-		return null;
+		System.out.println("Get Groups.");
+		return gson.toJson(resultMap);
 	}
 	
 	@SuppressWarnings("finally")
@@ -170,6 +183,57 @@ public class GroupController {
 			
 			return gson.toJson(resultMap);
 		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getGroupMembers", method = RequestMethod.POST, consumes = "application/json")
+	public String getGroupMembers(@RequestBody Map map) {
+		String groupid = map.get("groupid").toString();
+		Map<String, List<String>> resultMembers = new HashMap<String, List<String>>();
+		List<Group_User> userList = new ArrayList<Group_User>();
+		Gson gson = new Gson();
+		
+		userList = groupService.getGroupUsers(Integer.parseInt(groupid));
+		for(Group_User group_member: userList) {
+			List<String> eachUser = new ArrayList<String>();
+			User user = new User();
+			user = group_member.getUser();
+			eachUser.add(String.valueOf(group_member.getUserid()));
+			eachUser.add(user.getUsername());
+			eachUser.add(user.getImage());
+			resultMembers.put(String.valueOf(group_member.getUserid()), eachUser);
+		}
+		
+		return gson.toJson(resultMembers);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/kickGroupMember", method = RequestMethod.POST, consumes = "application/json")
+	public String kickGroupMember(@RequestBody Map map) {
+		String groupid = map.get("groupid").toString();
+		String userid = map.get("userid").toString();
+		Map<String, String> resultMap = new HashMap<String, String>();
+		Group_User group_kick = new Group_User();
+		Gson gson = new Gson();
+		
+		group_kick.setGroupid(Integer.parseInt(groupid));
+		group_kick.setUserid(Integer.parseInt(userid));
+		if(groupService.kickUser(group_kick) == 1) {
+			GroupNotice notice = new GroupNotice();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			notice.setUserid(Integer.parseInt(userid));
+			notice.setOperation(0);
+			notice.setType(3);
+			notice.setSource(groupid);
+			notice.setTarget(userid);
+			notice.setResult(1);
+			notice.setTime(sdf.format(new Date()));
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
+		}
+		
+		return gson.toJson(resultMap);
 	}
 	
 	public Group createGroup_setGroup(Group group, String filedName, String filedValue) {

@@ -8,6 +8,6 @@
 	</select>
 	
 	<insert id="doReg" parameterType="com.ten.txzh.pojo.User"  >
-		INSERT INTO USER (username,email,password) values (#{username},#{email},#{password});	
+		INSERT INTO USER (username,email,password,image) values (#{username},#{email},#{password},#{image});	
 	</insert>
 </mapper>

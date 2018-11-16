@@ -6,4 +6,8 @@
 	<select id="getUserInfo" parameterType="int" resultType="com.ten.txzh.pojo.User">
 		select userid,username,email,address,image from user where userid = #{userid};
 	</select>
+	
+	<select id="getUserNameByUserid" parameterType="int" resultType="java.lang.String">
+		select username from user where userid = #{_parameter}
+	</select>
 </mapper>

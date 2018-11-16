@@ -5,7 +5,8 @@ import java.util.List;
 public class Group_User {
 	private int groupid;
 	private int userid;
-	private List<Group> groups;
+	private Group group;
+	private User user;
 	public int getGroupid() {
 		return groupid;
 	}
@@ -18,11 +19,18 @@ public class Group_User {
 	public void setUserid(int userid) {
 		this.userid = userid;
 	}
-	public List<Group> getGroups() {
-		return groups;
+	public Group getGroup() {
+		return group;
 	}
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	
 }
