@@ -16,10 +16,7 @@
 	<resultMap type="com.ten.txzh.pojo.Group_User" id="GroupUsersMap">
 		<id property="groupid" column="groupid" />
 		<result property="userid" column="userid" />
-		<association property="user" javaType="com.ten.txzh.pojo.User">
-			<id property="userid" column="userid" />
-			<result property="username" column="username" />
-			<result property="image" column="image" />
+		<association property="user" javaType="com.ten.txzh.pojo.User" column="userid" select="getGroupUserInfo">
 		</association>
 	</resultMap>
 	
@@ -30,13 +27,15 @@
 	</select>
 	
 	<select id="getGroupUsers" parameterType="int" resultMap="GroupUsersMap">
-		select a.groupid, a.userid, b.username, b.image 
-		from group_user a left join user b on a.userid = b.userid 
-		where groupid = #{_parameter}
+		select groupid, userid from group_user where groupid = #{_parameter}
 	</select>
 	
- 	<select id="getGroupMembers" parameterType="int" resultType="java.util.List">
- 		select userid from group_user where groupid = #{groupid};
+	<select id="getGroupUserInfo" parameterType="int" resultType="com.ten.txzh.pojo.User">
+		select username, image from user where userid = #{_parameter}
+	</select>
+	
+ 	<select id="getGroupUsersid" parameterType="int" resultType="String">
+ 		select userid from group_user where groupid = #{_parameter};
  	</select>
  	
  	<insert id="CreateGroup" parameterType="com.ten.txzh.pojo.Group"  >

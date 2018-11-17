@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -192,6 +193,7 @@ public class GroupController {
 		Map<String, List<String>> resultMembers = new HashMap<String, List<String>>();
 		List<Group_User> userList = new ArrayList<Group_User>();
 		Gson gson = new Gson();
+		System.out.println("groupid is:" + groupid);
 		
 		userList = groupService.getGroupUsers(Integer.parseInt(groupid));
 		for(Group_User group_member: userList) {
@@ -218,22 +220,27 @@ public class GroupController {
 		
 		group_kick.setGroupid(Integer.parseInt(groupid));
 		group_kick.setUserid(Integer.parseInt(userid));
-		if(groupService.kickUser(group_kick) == 1) {
-			GroupNotice notice = new GroupNotice();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			notice.setUserid(Integer.parseInt(userid));
-			notice.setOperation(0);
-			notice.setType(3);
-			notice.setSource(groupid);
-			notice.setTarget(userid);
-			notice.setResult(1);
-			notice.setTime(sdf.format(new Date()));
-			resultMap.put("resultCode", "1");
-		}else {
-			resultMap.put("resultCode", "0");
-		}
 		
-		return gson.toJson(resultMap);
+		if(groupService.kickGroupMemberCheck(group_kick) == 0) {
+			if(groupService.kickUser(group_kick) == 1) {
+				GroupNotice notice = new GroupNotice();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				notice.setUserid(Integer.parseInt(userid));
+				notice.setOperation(0);
+				notice.setType(3);
+				notice.setSource(groupid);
+				notice.setTarget(userid);
+				notice.setResult(1);
+				notice.setTime(sdf.format(new Date()));
+				resultMap.put("resultCode", "1");
+			}else {
+				resultMap.put("resultCode", "0");
+			}
+		}else {
+			resultMap.put("resultCode", "-1");
+		}
+			System.out.println("kick " + userid + " from " + groupid + ",resultCode:" + resultMap.get("resultCode"));
+			return gson.toJson(resultMap);
 	}
 	
 	public Group createGroup_setGroup(Group group, String filedName, String filedValue) {

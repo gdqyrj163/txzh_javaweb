@@ -7,17 +7,17 @@
 <title>Insert title here</title>
 </head>
 <body>
-<button onclick="doit()">测试G</button>
+<button onclick="doit()">测试</button>
 <script src="js/jquery-1.3.2.js"></script>
 <script src="js/json2.js"></script>
 <script>
 	function doit(){
-		var info = {"noticeid" : "1", "result" : "1"};
+		var info = {"groupid" : "1", "userid" : "123456"};
 		$.ajax({
 			type:"POST",
 			contentType:"application/json",
 			data:JSON.stringify(info),
-			url:"joinGroupNotice.spring",
+			url:"kickGroupMember.spring",
 		});
 	}
 </script>

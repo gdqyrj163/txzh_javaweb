@@ -1,5 +1,7 @@
 package com.ten.txzh.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.ten.txzh.pojo.Maps;
 import com.ten.txzh.pojo.User;
 import com.ten.txzh.service.LoginService;
 import com.ten.txzh.service.RegisterService;
@@ -48,6 +51,13 @@ public class RegisterController {
 			resultMap.put("email", user.getEmail());
 			resultMap.put("address", user.getAddress());
 			resultMap.put("image", user.getImage());
+			
+			Maps userLoc = new Maps();
+			userLoc.setUserid(user.getUserid());
+			userLoc.setLongtude(0);
+			userLoc.setLatitude(0);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			userLoc.setTime(sdf.format(new Date()));
 		}else {
 			resultMap.put("resultCode", String.valueOf(resultCode));
 		}

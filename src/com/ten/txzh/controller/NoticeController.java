@@ -84,9 +84,9 @@ public class NoticeController {
 		GroupNotice notice = new GroupNotice();
 		notice.setNoticeid(Integer.parseInt(noticeid));
 		notice.setResult(result);
-		notice.setOperation(0);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		notice.setTime(sdf.format(new Date()));
+		System.out.println("result is:" + result);
 		
 		if(noticeService.MessageHandle(notice) == 1) {
 			if(notice.getResult() == 1) {
@@ -95,19 +95,23 @@ public class NoticeController {
 				Group_User group_joiner = new Group_User();
 				if((handleNotice.getType() != 0) && (handleNotice.getType() != 2)) {
 					//Group to User
+					System.out.println("Group to User join in");
 					group_joiner.setGroupid(Integer.parseInt(handleNotice.getSource()));
 					group_joiner.setUserid(Integer.parseInt(handleNotice.getTarget()));
 				}else {
 					//User to Group
+					System.out.println("User to Group join in");
 					group_joiner.setGroupid(Integer.parseInt(handleNotice.getTarget()));
 					group_joiner.setUserid(Integer.parseInt(handleNotice.getSource()));
 				}
 				int resultCode = groupService.JoinGroup(group_joiner);
 				resultMap.put("resultCode", resultCode + "");
+				System.out.println("Apply Group Pass, resultCode:" + resultMap.get("resultCode"));
+			}else {
+				System.out.println("Apply Group No Pass");
 			}
-			System.out.println("Apply Group Pass");
 		}else {
-			System.out.println("Apply Group No Pass");
+			System.out.println("Handler has been wrong!");
 		}
 		Gson gson = new Gson();
 		return gson.toJson(resultMap);

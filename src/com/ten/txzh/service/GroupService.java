@@ -40,6 +40,18 @@ public class GroupService {
 		}
 	}
 	
+	@SuppressWarnings("finally")
+	public List<String> getGroupUsersid(int groupid){
+		List<String> userList = new ArrayList<String>();
+		try {
+			userList = groupDao.getGroupUsersid(groupid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return userList;
+		}
+	}
+	
 	public int CreateGroup(Group group) {
 		int groupid = 0;
 		groupid = groupDao.CreateGroup(group);
@@ -123,5 +135,15 @@ public class GroupService {
 		String groupName = "";
 		groupName = groupDao.getGroupNameByGroupid(groupid);
 		return groupName;
+	}
+	
+	public int kickGroupMemberCheck(Group_User group_kick) {
+		int resultCode = 0;
+		int masterid = 0;
+		masterid = groupDao.getGroupMaster(group_kick.getGroupid());
+		if(masterid == group_kick.getUserid()) {
+			resultCode = 1;
+		}
+		return resultCode;
 	}
 }
