@@ -36,12 +36,15 @@ public class LocationService {
 		return ResultCode;
 	}
 	
-	public List<Maps> getGroupLocation(int groupid){
+	public List<Maps> getGroupLocation(int groupid, int userid){
 		List<Maps> groupUsersLoc = new ArrayList<Maps>();
 		List<String> groupUsers = groupDao.getGroupUsersid(groupid);
 		if(groupUsers.isEmpty() == false) {
 			for(int i = 0; i < groupUsers.size(); i++) {
-				groupUsersLoc.add(locationDao.getUserLocation(Integer.parseInt(groupUsers.get(i))));
+				Maps eachUserLoc = locationDao.getUserLocation(Integer.parseInt(groupUsers.get(i)));
+				if(eachUserLoc.getUserid() != userid) {
+					groupUsersLoc.add(eachUserLoc);
+				}
 			}
 		}
 		return groupUsersLoc;
