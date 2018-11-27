@@ -39,7 +39,7 @@
  	</select>
  	
  	<insert id="CreateGroup" parameterType="com.ten.txzh.pojo.Group"  >
- 		<selectKey resultType="int" order="AFTER" keyProperty="groupid">
+ 		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="groupid">
  			select LAST_INSERT_ID()
  		</selectKey>
  		INSERT INTO `group`(name, introduce, master, image) VALUES(#{name}, #{introduce}, #{master}, #{image});

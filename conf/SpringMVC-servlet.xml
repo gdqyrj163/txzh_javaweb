@@ -18,6 +18,7 @@
       
 	<!-- 把标记了@Controller注解的类转换为bean -->
 	<context:component-scan base-package="com.ten.txzh.controller" />
+	<context:component-scan base-package="com.ten.txzh.websocket" />
 	
 	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
 	<bean
@@ -27,6 +28,8 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="defaultEncoding" value="utf-8" />
     </bean>
+    
+    <bean id="serviceUtils" class="com.ten.txzh.util.ServiceUtils"/>
 	
 	<mvc:annotation-driven />
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>

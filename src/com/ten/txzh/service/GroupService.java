@@ -54,7 +54,9 @@ public class GroupService {
 	
 	public int CreateGroup(Group group) {
 		int groupid = 0;
-		groupid = groupDao.CreateGroup(group);
+		if(groupDao.CreateGroup(group) > 0) {
+			groupid = group.getGroupid();
+		}
 		System.out.println("Create Group Success:" + groupid);
 		return groupid;
 	}
@@ -62,6 +64,7 @@ public class GroupService {
 	public int JoinGroup(Group_User group_user) {
 		int resultCode = 0;
 		if(groupDao.JoinGroupCheck(group_user) == 0) {
+			System.out.println("groupid:" + group_user.getGroupid());
 			System.out.println("User already to join in.");
 			if(groupDao.JoinGroup(group_user) > 0) {
 				resultCode = 1;

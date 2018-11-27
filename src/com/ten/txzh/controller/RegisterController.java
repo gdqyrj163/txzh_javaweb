@@ -33,7 +33,7 @@ public class RegisterController {
 		regUser.setUsername(map.get("username").toString());
 		regUser.setEmail(map.get("email").toString());
 		regUser.setPassword(map.get("password").toString());
-		regUser.setImage("-105");
+		regUser.setImage(map.get("image").toString());
 		
 		int checkCode = Integer.parseInt(map.get("checkCode").toString());
 		int resultCode = 0;
