@@ -42,7 +42,7 @@ public class LoginController {
 		}else {
 			resultMap.put("resultCode", "0");
 		}
-		System.out.println(resultMap);
+		System.out.println("User login:" + resultMap.get("userid"));
 		return gson.toJson(resultMap);
 	}
 }

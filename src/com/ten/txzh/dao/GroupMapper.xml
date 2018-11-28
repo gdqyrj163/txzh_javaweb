@@ -6,10 +6,7 @@
 	<resultMap id="GroupListMap" type="com.ten.txzh.pojo.Group_User">
 		<id property="userid" column="userid"/>
 		<result property="groupid" column="groupid"/>
-		<association property="group" javaType="com.ten.txzh.pojo.Group">
-			<id property="groupid" column="groupid"/>
-			<result property="name" column="name" />
-			<result property="image" column="image" />
+		<association property="group" javaType="com.ten.txzh.pojo.Group" column="groupid" select="getUserGroupInfo">
 		</association>
 	</resultMap>
 	
@@ -32,6 +29,10 @@
 	
 	<select id="getGroupUserInfo" parameterType="int" resultType="com.ten.txzh.pojo.User">
 		select username, image from user where userid = #{_parameter}
+	</select>
+	
+	<select id="getUserGroupInfo" parameterType="int" resultType="com.ten.txzh.pojo.Group">
+		select name, image from `group` where groupid = #{_parameter}
 	</select>
 	
  	<select id="getGroupUsersid" parameterType="int" resultType="String">
