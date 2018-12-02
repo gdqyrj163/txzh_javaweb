@@ -1,6 +1,8 @@
 package com.ten.txzh.websocket;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +18,6 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.gson.Gson;
 import com.ten.txzh.pojo.User;
 import com.ten.txzh.service.UserService;
@@ -27,11 +27,16 @@ import com.ten.txzh.util.ServiceUtils;
 public class WsServer {
 	private static final Map<String, Set<Session>> rooms = new ConcurrentHashMap<String, Set<Session>>();
 	private static final List<Map<Session, List<String>>> speakers = new ArrayList<Map<Session, List<String>>>();
-	
-	UserService userService = (UserService)ServiceUtils.getBean(UserService.class);
+	private UserService userService = (UserService)ServiceUtils.getBean(UserService.class);
+	private String forUserid;
+	private String forGroupid;
+	private WsHandler wsh = new WsHandler();
 	
 	@OnOpen
 	public void connnect(@PathParam("roomName") String roomName, @PathParam("userid") String userid, Session session) throws Exception{
+		this.forUserid = userid;
+		this.forGroupid = roomName;
+		
 		if(!rooms.containsKey(roomName)) {
 			//保存聊天房间与session的关系
 			Set<Session> room = new HashSet<>();
@@ -84,7 +89,10 @@ public class WsServer {
 	
 	@OnMessage
 	public void broadcastMessage(@PathParam("roomName") String roomName, String msg, Session session) throws Exception{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+		String time = sdf.format(new Date());
 		broadcast(roomName, msg, session);
+		wsh.saveGroupChat(forUserid, forGroupid, msg, time);
 		System.out.println(session.getId() + " send message to " + roomName + " with message:" + msg);
 	}
 	
@@ -104,7 +112,7 @@ public class WsServer {
 				for(int i = 0; i < speakers.size(); i++) {
 					Map<Session, List<String>> speaker = speakers.get(i);
 					for(Session checkSession : speaker.keySet()) {
-						if(checkSession == session) {
+						if(checkSession == sourceSession) {
 							speakerInfo = speaker.get(checkSession);
 							break;
 						}

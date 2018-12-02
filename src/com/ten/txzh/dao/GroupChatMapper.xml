@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ten.txzh.dao.GroupChatMapper">
+	<insert id="setUserGroupChatLastTime" parameterType="com.ten.txzh.pojo.GroupChat">
+		insert into groupchat values(#{userid}, #{groupid}, #{lasttime});
+	</insert>
+	
+	<update id="updateUserGroupChatLastTime" parameterType="com.ten.txzh.pojo.GroupChat">
+		update groupchat set lasttime = #{lasttime} where userid = #{userid} and groupid = #{groupid};
+	</update>
+	
+	<select id="checkUGCTime" parameterType="com.ten.txzh.pojo.GroupChat" resultType="int">
+		select count(*) from groupchat where userid = #{userid} and groupid = #{groupid};
+	</select>
+	
+	<select id="getUserGroupChatLastTime" parameterType="com.ten.txzh.pojo.GroupChat" resultType="java.lang.String">
+		select lasttime from groupchat where userid = #{userid} and groupid = #{groupid};
+	</select>
+</mapper>

@@ -10,4 +10,10 @@
 	<select id="getUserNameByUserid" parameterType="int" resultType="java.lang.String">
 		select username from user where userid = #{_parameter}
 	</select>
+	
+	<update id="alterUserInfo" parameterType="com.ten.txzh.pojo.User">
+		update user 
+		set username = #{username}, address = #{address}, image = #{image} 
+		where userid = #{userid}
+	</update>
 </mapper>

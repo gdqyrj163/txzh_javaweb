@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.ten.txzh.pojo.User;
 import com.ten.txzh.service.LoginService;
+import com.ten.txzh.websocket.WsHandler;
 
 @Controller
 public class LoginController {
@@ -36,8 +37,6 @@ public class LoginController {
 			resultMap.put("resultCode", "1");
 			resultMap.put("userid", String.valueOf(user.getUserid()));
 			resultMap.put("username", user.getUsername());
-			resultMap.put("email", user.getEmail());
-			resultMap.put("address", user.getAddress());
 			resultMap.put("image", user.getImage());
 		}else {
 			resultMap.put("resultCode", "0");

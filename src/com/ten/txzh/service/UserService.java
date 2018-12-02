@@ -30,4 +30,12 @@ public class UserService {
 		userName = userDao.getUserNameByUserid(userid);
 		return userName;
 	}
+	
+	public int alterUserInfo(User user) {
+		int resultCode = 0;
+		if(userDao.alterUserInfo(user) > 0) {
+			resultCode = 1;
+		}
+		return resultCode;
+	}
 }

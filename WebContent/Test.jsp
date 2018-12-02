@@ -12,12 +12,12 @@
 <script src="js/json2.js"></script>
 <script>
 	function doit(){
-		var info = {"groupid" : "1", "userid" : "123456"};
+		var info = {"email" : "1", "password" : "123456"};
 		$.ajax({
 			type:"POST",
-			contentType:"application/json",
+			contentType:"/json",
 			data:JSON.stringify(info),
-			url:"kickGroupMember.spring",
+			url:"/login.spring",
 		});
 	}
 </script>
