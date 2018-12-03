@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.ten.txzh.pojo.Group;
+import com.ten.txzh.pojo.GroupChat;
 import com.ten.txzh.pojo.GroupNotice;
 import com.ten.txzh.pojo.Group_User;
 import com.ten.txzh.pojo.User;
+import com.ten.txzh.service.GroupChatService;
 import com.ten.txzh.service.GroupService;
 import com.ten.txzh.service.NoticeService;
 import com.ten.txzh.service.UserService;
@@ -36,9 +37,11 @@ public class GroupController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private GroupChatService gcService;
 	
 	@ResponseBody
-	@RequestMapping(value = "/getGroups", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/getGroups", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String getGroups(@RequestBody Map map) {
 		Gson gson = new Gson();
 		String userid = map.get("userid").toString();
@@ -62,7 +65,7 @@ public class GroupController {
 	
 	@SuppressWarnings("finally")
 	@ResponseBody
-	@RequestMapping(value = "/createGroup", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/createGroup", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String createGroup(@RequestBody Map map){
 		Gson gson = new Gson();
 		Map<String, String> resultMap = new HashMap<String, String>();
@@ -85,6 +88,7 @@ public class GroupController {
 			group_master.setUserid(Integer.parseInt(master));
 			groupService.JoinGroup(group_master);
 			resultMap.put("resultCode", "1");
+			resultMap.put("groupid", groupid + "");
 		}else {
 			resultMap.put("resultCode", "0");
 		}
@@ -95,7 +99,7 @@ public class GroupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/searchGroup", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/searchGroup", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String searchGroup(@RequestBody Map map) {
 		String searchGroupValue = map.get("searchGroupValue").toString();
 		List<Group> groupList = new ArrayList<Group>();
@@ -120,7 +124,7 @@ public class GroupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/joinGroup", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/joinGroup", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String joinGroup(@RequestBody Map map) {
 		String userid = map.get("userid").toString();
 		String groupid = map.get("groupid").toString();
@@ -158,7 +162,7 @@ public class GroupController {
 	
 	@SuppressWarnings("finally")
 	@ResponseBody
-	@RequestMapping(value = "/getGroupInfo", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/getGroupInfo", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String getGroupInfo(@RequestBody Map map) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		int groupid = Integer.parseInt(map.get("groupid").toString());
@@ -187,7 +191,7 @@ public class GroupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getGroupMembers", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/getGroupMembers", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String getGroupMembers(@RequestBody Map map) {
 		String groupid = map.get("groupid").toString();
 		Map<String, List<String>> resultMembers = new HashMap<String, List<String>>();
@@ -210,7 +214,7 @@ public class GroupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/kickGroupMember", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/kickGroupMember", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String kickGroupMember(@RequestBody Map map) {
 		String groupid = map.get("groupid").toString();
 		String userid = map.get("userid").toString();
@@ -241,6 +245,109 @@ public class GroupController {
 		}
 			System.out.println("kick " + userid + " from " + groupid + ",resultCode:" + resultMap.get("resultCode"));
 			return gson.toJson(resultMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/quitGroup", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
+	public String quitGroup(@RequestBody Map map) {
+		String userid = map.get("userid").toString();
+		String groupid = map.get("groupid").toString();
+		Map<String, String> resultMap = new HashMap<String, String>();
+		
+		Group_User group_quit = new Group_User();
+		group_quit.setGroupid(Integer.parseInt(groupid));
+		group_quit.setUserid(Integer.parseInt(userid));
+		
+		if(groupService.kickUser(group_quit) > 0) {
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
+		}
+		
+		Gson gson = new Gson();
+		System.out.println("User(" + userid + ") quit a group(" + groupid + ").");
+		return gson.toJson(resultMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/disbandGroup", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
+	public String disbandGroup(@RequestBody Map map) {
+		String groupid = map.get("groupid").toString();
+		List<String> groupUsersid = new ArrayList<String>();
+		Map<String, String> resultMap = new HashMap<String, String>();
+		
+		groupUsersid = groupService.getGroupUsersid(Integer.parseInt(groupid));
+		boolean workFlag = true;
+		for(String userid : groupUsersid) {
+			Group_User group_user = new Group_User();
+			group_user.setGroupid(Integer.parseInt(groupid));
+			group_user.setUserid(Integer.parseInt(userid));
+			GroupChat gc = new GroupChat();
+			gc.setGroupid(Integer.parseInt(groupid));
+			gc.setUserid(Integer.parseInt(userid));
+			if(gcService.checkGroupChatExist(gc) > 0) {
+				gcService.removeGroupChat(gc);
+			}
+			if(groupService.kickUser(group_user) == 0) {
+				workFlag = false;
+			}
+		}
+		if(workFlag && (groupService.disbandGroup(Integer.parseInt(groupid)) > 0)) {
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
+		}
+		
+		Gson gson = new Gson();
+		System.out.println("Group(" + groupid + ") has been disband.");
+		return gson.toJson(resultMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/searchInviteUser", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
+	public String searchInviteUser(@RequestBody Map map) {
+		String userid = map.get("userid").toString();
+		Map<String, String> resultMap = new HashMap<String, String>();
+		User user = new User();
+		Gson gson = new Gson();
+		
+		user = userService.getUserInfo(Integer.parseInt(userid));
+		if(user != null) {
+			resultMap.put("userid", String.valueOf(user.getUserid()));
+			resultMap.put("username", user.getUsername());
+			resultMap.put("image", user.getImage());
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
+		}
+		System.out.println("Search invite user.");
+		return gson.toJson(resultMap);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/inviteUser", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
+	public String inviteUser(@RequestBody Map map) {
+		String groupid = map.get("groupid").toString();
+		String userid = map.get("userid").toString();
+		Map<String, String> resultMap = new HashMap<String, String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Gson gson = new Gson();
+		GroupNotice inviteNotice = new GroupNotice();
+		
+		inviteNotice.setUserid(Integer.parseInt(userid));
+		inviteNotice.setOperation(1);
+		inviteNotice.setType(1);
+		inviteNotice.setSource(groupid);
+		inviteNotice.setTarget(userid);
+		inviteNotice.setResult(2);
+		inviteNotice.setTime(sdf.format(new Date()));
+		if(noticeService.JoinMessage(inviteNotice) > 0) {
+			resultMap.put("resultCode", "1");
+		}else {
+			resultMap.put("resultCode", "0");
+		}
+		System.out.println("Invite user(" + userid + ") into group " + groupid);
+		return gson.toJson(resultMap);
 	}
 	
 	public Group createGroup_setGroup(Group group, String filedName, String filedValue) {

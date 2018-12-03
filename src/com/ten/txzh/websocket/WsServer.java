@@ -44,7 +44,6 @@ public class WsServer {
 			rooms.put(roomName, room);
 			//获取User
 			User user = new User();
-			System.out.println(Integer.parseInt(userid));
 			user = userService.getUserInfo(Integer.parseInt(userid));
 			//保存session与用户信息的关系
 			Map<Session, List<String>> speaker = new HashMap<Session, List<String>>();
@@ -69,7 +68,7 @@ public class WsServer {
 			speaker.put(session, speakerInfo);
 			speakers.add(speaker);
 		}
-		System.out.println("Client " + session.getId() + "(userid=" + userid + ") connected!");
+		System.out.println("Client " + session.getId() + "(userid=" + userid + ") connected!RoomName is " + roomName + ".");
 	}
 	
 	@OnClose
@@ -89,7 +88,7 @@ public class WsServer {
 	
 	@OnMessage
 	public void broadcastMessage(@PathParam("roomName") String roomName, String msg, Session session) throws Exception{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		String time = sdf.format(new Date());
 		broadcast(roomName, msg, session);
 		wsh.saveGroupChat(forUserid, forGroupid, msg, time);
@@ -98,9 +97,7 @@ public class WsServer {
 	
 	@OnError
 	public void errorHandle(Session session, Throwable error) {
-		if(error.getMessage().contentEquals("java.io.EOFException")) {
-			System.out.println(session.getId() + " has some problems, it will be close for moment.");
-		}
+		System.out.println(session.getId() + " has some problems, it will be close for moment.");
 	}
 	
 	public static void broadcast(String roomName, String msg, Session sourceSession) throws Exception {

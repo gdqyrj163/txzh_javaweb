@@ -3,9 +3,11 @@ package com.ten.txzh.websocket;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +69,7 @@ public class WsHandler {
 			if(timeInt.compareTo(lineTimeInt) == -1) {
 				String userid = items[0];
 				User user = new User();
-				user = userService.getUserInfo(Integer.parseInt(userid));
+				user = userService.getUserInfo(Integer.parseInt(userid.trim()));
 				
 				List<String> msgList = new ArrayList<String>();
 				msgList.add(userid);
@@ -82,5 +84,49 @@ public class WsHandler {
 		}
 		Gson gson = new Gson();
 		return gson.toJson(msgMap);
+	}
+	
+	public String readLastLine(String groupid, String charset) throws IOException {
+		String groupPath = indexPath + groupid + "/";
+		File file = new File(groupPath + groupid + ".txzh");
+	    if (!file.exists() || file.isDirectory() || !file.canRead()) {
+	        return null;
+	    }
+	    RandomAccessFile raf = null;
+	    try {
+	        raf = new RandomAccessFile(file, "r");
+	        long len = raf.length();
+	        if (len == 0L) {
+	            return "";
+	        } else {
+	            long pos = len - 1;
+	            while (pos > 0) {
+	                pos--;
+	                raf.seek(pos);
+	                if (raf.readByte() == '\n') {
+	                    break;
+	                }
+	            }
+	            if (pos == 0) {
+	                raf.seek(0);
+	            }
+	            byte[] bytes = new byte[(int) (len - pos)];
+	            raf.read(bytes);
+	            if (charset == null) {
+	                return new String(bytes);
+	            } else {
+	                return new String(bytes, charset);
+	            }
+	        }
+	    } catch (FileNotFoundException e) {
+	    } finally {
+	        if (raf != null) {
+	            try {
+	                raf.close();
+	            } catch (Exception e2) {
+	            }
+	        }
+	    }
+	    return null;
 	}
 }

@@ -21,7 +21,6 @@ public class UserService {
 			e.printStackTrace();
 		}finally {
 			return user;
-			
 		}
 	}
 	
@@ -37,5 +36,23 @@ public class UserService {
 			resultCode = 1;
 		}
 		return resultCode;
+	}
+	
+	public int changePassword(User user) {
+		int updateRow = 0;
+		updateRow = userDao.changePassword(user);
+		return updateRow;
+	}
+	
+	@SuppressWarnings("finally")
+	public int getUseridByEmail(String email) {
+		int userid = -1;
+		try {
+			userid = userDao.getUseridByEmail(email);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return userid;
+		}
 	}
 }

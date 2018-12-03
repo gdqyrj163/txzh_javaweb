@@ -21,4 +21,5 @@ public interface GroupMapper {
 	int getGroupMembersNumber(int groupid);
 	List<Group> getGroupByUserid(int userid);
 	String getGroupNameByGroupid(int groupid);
+	int disbandGroup(int groupid);
 }

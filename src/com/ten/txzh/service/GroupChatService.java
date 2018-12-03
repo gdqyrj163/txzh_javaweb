@@ -1,5 +1,8 @@
 package com.ten.txzh.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,18 @@ import com.ten.txzh.pojo.GroupChat;
 public class GroupChatService {
 	@Autowired
 	GroupChatMapper gcDao;
+	
+	@SuppressWarnings("finally")
+	public List<GroupChat> getUserHistoryGroupChat(int userid){
+		List<GroupChat> gcList = new ArrayList<GroupChat>();
+		try {
+			gcList = gcDao.getUserHistoryGroupChat(userid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			return gcList;
+		}
+	}
 	
 	public int setUserGroupChatLastTime(GroupChat gc) {
 		int resultCode = 0;
@@ -37,5 +52,17 @@ public class GroupChatService {
 		}finally {
 			return lastTime;
 		}
+	}
+	
+	public int checkGroupChatExist(GroupChat gc) {
+		int resultNum = 0;
+		resultNum = gcDao.checkGroupChatExist(gc);
+		return resultNum;
+	}
+	
+	public int removeGroupChat(GroupChat gc) {
+		int updateRow = 0;
+		updateRow = gcDao.removeGroupChat(gc);
+		return updateRow;
 	}
 }

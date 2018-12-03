@@ -149,4 +149,10 @@ public class GroupService {
 		}
 		return resultCode;
 	}
+	
+	public int disbandGroup(int groupid) {
+		int updateRow = 0;
+		updateRow = groupDao.disbandGroup(groupid);
+		return updateRow;
+	}
 }

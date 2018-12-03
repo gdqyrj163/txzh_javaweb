@@ -29,13 +29,13 @@ public class LocationController {
 	private UserService userService;
 	
 	@ResponseBody
-	@RequestMapping(value = "/catchGPS", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/catchGPS", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String getGPS(@RequestBody Map map) {
 		Maps userLoc = new Maps();
 		userLoc.setUserid(Integer.parseInt(map.get("userid").toString()));
 		userLoc.setLongtude(Float.parseFloat(map.get("longtude").toString()));
 		userLoc.setLatitude(Float.parseFloat(map.get("latitude").toString()));
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		userLoc.setTime(format.format(new Date()));
 		
 		HashMap<String, String> resultMap = new HashMap<String, String>();
@@ -52,7 +52,7 @@ public class LocationController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getGroupLocation", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/getGroupLocation", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String getGroupLocation(@RequestBody Map map) {
 		String groupid = map.get("groupid").toString();
 		String userid = map.get("userid").toString();

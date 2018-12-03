@@ -12,12 +12,15 @@
 <script src="js/json2.js"></script>
 <script>
 	function doit(){
-		var info = {"email" : "1", "password" : "123456"};
+		var info = {"email" : "648854967@qq.com"};
 		$.ajax({
 			type:"POST",
-			contentType:"/json",
+			contentType:"application/json",
 			data:JSON.stringify(info),
-			url:"/login.spring",
+			url:"setCheckCode.spring",
+			success:function(){
+				alert("Pass")
+			}
 		});
 	}
 </script>

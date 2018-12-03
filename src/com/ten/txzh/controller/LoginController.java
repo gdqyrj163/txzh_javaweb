@@ -21,7 +21,7 @@ public class LoginController {
 	private LoginService loginService;
 	
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String login(@RequestBody Map map) {
 		User login_user = new User();
 		login_user.setEmail(map.get("email").toString());

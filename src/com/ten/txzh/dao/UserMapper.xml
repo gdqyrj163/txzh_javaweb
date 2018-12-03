@@ -16,4 +16,14 @@
 		set username = #{username}, address = #{address}, image = #{image} 
 		where userid = #{userid}
 	</update>
+	
+	<update id="changePassword" parameterType="com.ten.txzh.pojo.User">
+		update user 
+		set password = #{password} 
+		where userid = #{userid}
+	</update>
+	
+	<select id="getUseridByEmail" parameterType="java.lang.String" resultType="int">
+		select userid from user where email = #{_parameter}
+	</select>
 </mapper>

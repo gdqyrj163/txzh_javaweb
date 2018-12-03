@@ -18,4 +18,17 @@
 	<select id="getUserGroupChatLastTime" parameterType="com.ten.txzh.pojo.GroupChat" resultType="java.lang.String">
 		select lasttime from groupchat where userid = #{userid} and groupid = #{groupid};
 	</select>
+	
+	<select id="getUserHistoryGroupChat" parameterType="int" resultType="com.ten.txzh.pojo.GroupChat">
+		select * from groupchat where userid = #{_parameter}
+	</select>
+	
+	<select id="checkGroupChatExist" parameterType="com.ten.txzh.pojo.GroupChat" resultType="int">
+		select count(*) from groupchat where userid = #{userid} and groupid = #{groupid};
+	</select>
+	
+	<delete id="removeGroupChat" parameterType="com.ten.txzh.pojo.GroupChat">
+		delete from groupchat where userid = #{userid} and groupid = #{groupid};
+	</delete>
+	
 </mapper>

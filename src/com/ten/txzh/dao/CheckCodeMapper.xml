@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ten.txzh.dao.CheckCodeMapper">
+	<insert id="saveCheckCode" parameterType="com.ten.txzh.pojo.CheckCode">
+		insert into checkcode values(#{email}, #{checkCode}, #{time});
+	</insert>
+	
+	<select id="getCheckCodeTime" parameterType="java.lang.String" resultType="java.lang.String">
+		select time from checkcode where email = #{_parameter};
+	</select>
+	
+	<delete id="deleteCheckCode" parameterType="java.lang.String">
+		delete from checkcode where email = #{_parameter};
+	</delete>
+	
+	<select id="checkExist" parameterType="java.lang.String" resultType="int">
+		select count(*) from checkcode where email = #{_parameter};
+	</select>
+	
+	<select id="getCheckCode" parameterType="java.lang.String" resultType="java.lang.String">
+		select checkcode from checkcode where email = #{_parameter};
+	</select>
+</mapper>

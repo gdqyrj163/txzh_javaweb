@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ten.txzh.dao.NoticeMapper">
 	<select id="getGroupNotice" parameterType="int" resultType="com.ten.txzh.pojo.GroupNotice">
-		select * from groupNotice where userid = #{_parameter};
+		select * from groupNotice where userid = #{_parameter} order by operation desc;
 	</select>
 	
 	<select id="getNoticeByNoticeid" parameterType="int" resultType="com.ten.txzh.pojo.GroupNotice">

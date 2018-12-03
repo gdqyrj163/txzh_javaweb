@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.ten.txzh.pojo.Maps;
 import com.ten.txzh.pojo.User;
+import com.ten.txzh.service.CheckCodeService;
 import com.ten.txzh.service.LoginService;
 import com.ten.txzh.service.RegisterService;
 
@@ -26,18 +27,21 @@ public class RegisterController {
 	@Autowired
 	private LoginService loginService;
 	
+	@Autowired
+	private CheckCodeService ccService;
+	
 	@ResponseBody
-	@RequestMapping(value = "/reg", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/reg", method = RequestMethod.POST, consumes = "application/json", produces = "text/html;charset=UTF-8")
 	public String register(@RequestBody Map map) {
 		User regUser = new User();
 		regUser.setUsername(map.get("username").toString());
 		regUser.setEmail(map.get("email").toString());
 		regUser.setPassword(map.get("password").toString());
 		regUser.setImage(map.get("image").toString());
-		
-		int checkCode = Integer.parseInt(map.get("checkCode").toString());
+		String email = map.get("email").toString();
+		String checkCode = map.get("checkCode").toString();
 		int resultCode = 0;
-		if(checkCode == 123456) {
+		if(ccService.compareCheckCode(email, checkCode)) {
 			resultCode = registerService.doReg(regUser);
 		}
 		
@@ -63,7 +67,7 @@ public class RegisterController {
 		}
 		
 		Gson gson = new Gson();
-		System.out.println(resultMap);
+		System.out.println("Register user:" + resultMap.get("userid"));
 		return gson.toJson(resultMap);
 	}
 }
